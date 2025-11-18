@@ -1,5 +1,5 @@
     app:
-        name: MySQL-Slave-wordpress
+        name: MySQL-wordpress
         code: mysql
         notify: appzdev@cloudbourne.co
 
