@@ -8,7 +8,7 @@
         env: PROD
         build_file: none
         output_files: output/*.zip
-        image_template: mysql_slave-8.0
+        image_template: mysql_master-8.0
 
     deploy:
         context: tipreprod/PROD
@@ -40,5 +40,5 @@
         MYSQL_ROOT_PASSWORD:
           vault: MYSQL_ROOT_PASSWORD_KEY
         DB_MASTER: 172.20.22.64
-        revision : 02
+        revision : 03
      
