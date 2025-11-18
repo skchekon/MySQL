@@ -1,37 +1,44 @@
     app:
-        name: MySQL
+        name: MySQL-Slave-wordpress
         code: mysql
-        notify: skchekon@ecloudcontrol.com
+        notify: appzdev@cloudbourne.co
 
     build:
-        version: 5.7
-        env: DEV
+        version: 8.1
+        env: PROD
         build_file: none
         output_files: output/*.zip
-        image_template: mysql-5.7
+        image_template: mysql_slave-8.0
 
     deploy:
-        context: skchekon/DEV
+        context: tipreprod/PROD
         type: statefulset
         replicas: 1
-        resources: x-large
-        ingress: none
+        #ingress: none
+       # resources: x-large
         port:
         - 3306
-
+        - 9104
     volumes:
-      - claim: mysql-data
+      - claim: mysql-data-wordpress
+        class: linode-block-storage
         mount: /var/lib/mysql
         name: data
-        size: 5Gi
-      - claim: mysql-backup
+        size: 100Gi
+        matchLabels: false
+      - claim: mysql-backup-wordpress
+        class: linode-block-storage
         mount: /appz/backup
         name: backup
-        size: 5Gi
+        size: 100Gi
+        matchLabels: false
 
     properties:
+        MYSQL_REPLICATION_USER: repl
+        MYSQL_REPLICATION_PASSWORD:
+          vault: MYSQL_REPLICATION_PASSWORD
         MYSQL_ROOT_PASSWORD:
-          vault: MYSQL_ROOT_PASSWORD
-        MYSQL_DB_PASSWORD:
-          vault: MYSQL_DB_PASSWORD
-        revision : 3
+          vault: MYSQL_ROOT_PASSWORD_KEY
+        DB_MASTER: 172.20.22.64
+        revision : 01
+     
